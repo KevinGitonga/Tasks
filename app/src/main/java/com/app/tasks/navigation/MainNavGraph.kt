@@ -22,7 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.app.tasks.modules.TasksListScreen
+import com.app.tasks.modules.tasklist.TaskListScreen
 
 @Composable
 fun MainNavGraph(
@@ -35,7 +35,7 @@ fun MainNavGraph(
         exitTransition = { fadeOut(animationSpec = tween(300)) },
     ) {
         composable<Destinations.TasksListScreen> {
-            TasksListScreen(navController = navController)
+            TaskListScreen(navController = navController)
         }
     }
 }

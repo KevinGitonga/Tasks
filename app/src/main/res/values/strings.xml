@@ -3,4 +3,6 @@
     <string name="back">Back</string>
     <string name="filter">Filter</string>
     <string name="create_task">Create Task</string>
+    <string name="try_again">Try Again</string>
+    <string name="no_tasks_available">No Tasks available, click below to add.</string>
 </resources>
