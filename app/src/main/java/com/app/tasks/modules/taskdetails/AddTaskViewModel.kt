@@ -108,7 +108,7 @@ class AddTaskViewModel
                         TaskEntity(
                             title = state.taskTitle,
                             description = state.taskDescription,
-                            priority = state.taskPriority.name,
+                            priority = state.taskPriority.priorityValue,
                             dueDate = state.taskDueDate,
                             taskStatus = TaskStatuses.Pending.statusName,
                         ),
@@ -224,8 +224,10 @@ sealed class AddTaskAction {
     data object SaveTaskClick : AddTaskAction()
 }
 
-enum class TaskPriorities {
-    Low,
-    Medium,
-    High,
+enum class TaskPriorities(
+    val priorityValue: Int,
+) {
+    Low(priorityValue = 1),
+    Medium(priorityValue = 2),
+    High(priorityValue = 3),
 }

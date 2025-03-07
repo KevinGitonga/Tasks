@@ -111,7 +111,7 @@ fun TaskListItem_Preview() {
                     taskStatus = "pending",
                     dueDate = ZonedDateTime.now().plusDays(3),
                     taskId = 11,
-                    priority = TaskPriorities.Low.name,
+                    priority = TaskPriorities.Low.priorityValue,
                 ),
             onClick = {},
         )

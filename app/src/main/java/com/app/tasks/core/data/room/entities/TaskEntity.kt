@@ -36,7 +36,7 @@ data class TaskEntity(
     @ColumnInfo(name = "description")
     val description: String,
     @ColumnInfo(name = "priority")
-    val priority: String,
+    val priority: Int,
     @ColumnInfo(name = "due_date")
     val dueDate: ZonedDateTime,
     @ColumnInfo(name = "status")
