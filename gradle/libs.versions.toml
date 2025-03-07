@@ -7,6 +7,7 @@ work = "2.10.0"
 ksp = "2.1.10-1.0.30"
 android-core = "1.15.0"
 kotlinxSerialization = "1.8.0"
+kotlinxCollectionsImmutable = "0.3.8"
 lifecycle = "2.8.7"
 composeBom = "2025.02.00"
 navigation = "2.8.8"
@@ -82,6 +83,8 @@ hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hiltKtx"}
 hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltKtx"}
 
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
+
 
 # Unit Test
 junit = { module = "junit:junit", version.ref = "junit"}

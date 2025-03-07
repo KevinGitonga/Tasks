@@ -13,28 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.app.tasks.core.data.room.convertors
+package com.app.tasks.core.utils
 
-import androidx.room.TypeConverter
-import java.util.Date
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 /**
- * A [TypeConverter] to convert a [Date] to and from a [Long].
+ * Creates an immutable [ImmutableList] of the given [elements] excluding the null ones.
  */
-class DateConverter {
-    /**
-     * A [TypeConverter] to convert a [Long] to a [Date].
-     */
-    @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return if (value == null) null else Date(value)
-    }
-
-    /**
-     * A [TypeConverter] to convert a [Date] to a [Long].
-     */
-    @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time
-    }
-}
+fun <T : Any> persistentListOfNotNull(vararg elements: T?): ImmutableList<T> =
+    elements.filterNotNull().toImmutableList()

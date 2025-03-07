@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.app.tasks.modules.taskdetails.AddTaskScreen
 import com.app.tasks.modules.tasklist.TaskListScreen
 
 @Composable
@@ -36,6 +37,10 @@ fun MainNavGraph(
     ) {
         composable<Destinations.TasksListScreen> {
             TaskListScreen(navController = navController)
+        }
+
+        composable<Destinations.AddTaskScreen> {
+            AddTaskScreen(navController = navController)
         }
     }
 }

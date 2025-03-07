@@ -13,17 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.app.tasks.navigation
+package com.app.tasks.core.extensions
 
-import kotlinx.serialization.Serializable
+import java.time.ZonedDateTime
 
-sealed class Destinations {
-    @Serializable
-    data object TasksListScreen : Destinations()
-
-    @Serializable
-    data object AddTaskScreen : Destinations()
-
-    @Serializable
-    data class TaskDetails(val taskId: Int) : Destinations()
-}
+/**
+ * Returns the current [ZonedDateTime] or [ZonedDateTime.now] if the current one is null.
+ */
+fun ZonedDateTime?.orNow(): ZonedDateTime = this ?: ZonedDateTime.now()

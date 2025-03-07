@@ -5,4 +5,22 @@
     <string name="create_task">Create Task</string>
     <string name="try_again">Try Again</string>
     <string name="no_tasks_available">No Tasks available, click below to add.</string>
+    <string name="close">Close</string>
+    <string name="save">Save</string>
+    <string name="task_details">Task Details</string>
+    <string name="task_title">Title</string>
+    <string name="task_description">Task Description</string>
+    <string name="priority">Task Priority</string>
+    <string name="due_date">Due date</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_priority">Task priority</string>
+    <string name="due_time">Due time</string>
+    <string name="time">time</string>
+    <string name="ok">OK</string>
+    <string name="select_date">Select date</string>
+    <string name="task_saved_successfully">Task saved successfully.</string>
+    <string name="saving_task_please_wait">Saving Task please wait..</string>
+    <string name="tasks_details">Tasks Details</string>
+    <string name="expand">Expand</string>
+    <string name="sort_tasks">Sort tasks</string>
 </resources>

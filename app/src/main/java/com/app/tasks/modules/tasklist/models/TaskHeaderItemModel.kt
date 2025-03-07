@@ -13,32 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.app.tasks.core.data.room.entities
+package com.app.tasks.modules.tasklist.models
 
 import android.os.Parcelable
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
-import java.time.ZonedDateTime
 
-/**
- * Entity representing a single task in the database.
- */
 @Parcelize
-@Entity(tableName = "tasks")
-data class TaskEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val taskId: Int = 0,
-    @ColumnInfo(name = "title")
-    val title: String,
-    @ColumnInfo(name = "description")
-    val description: String,
-    @ColumnInfo(name = "priority")
-    val priority: String,
-    @ColumnInfo(name = "due_date")
-    val dueDate: ZonedDateTime,
-    @ColumnInfo(name = "status")
-    val taskStatus: String,
+data class TaskHeaderItemModel(
+    val sectionName: String,
+    val totalItemsCount: Int,
+    var isExpanded: Boolean,
 ) : Parcelable

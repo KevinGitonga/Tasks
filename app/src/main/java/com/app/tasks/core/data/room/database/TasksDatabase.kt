@@ -18,7 +18,7 @@ package com.app.tasks.core.data.room.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.app.tasks.core.data.room.convertors.DateConverter
+import com.app.tasks.core.data.room.convertors.ZonedDateTimeTypeConverter
 import com.app.tasks.core.data.room.dao.TasksDao
 import com.app.tasks.core.data.room.entities.TaskEntity
 
@@ -32,7 +32,7 @@ import com.app.tasks.core.data.room.entities.TaskEntity
     version = 1,
     exportSchema = true,
 )
-@TypeConverters(DateConverter::class)
+@TypeConverters(ZonedDateTimeTypeConverter::class)
 abstract class TasksDatabase : RoomDatabase() {
     /**
      * Provides the DAO for accessing tasks data.

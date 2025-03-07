@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.app.tasks.navigation
+package com.app.tasks.core.field
 
-import kotlinx.serialization.Serializable
+import androidx.compose.ui.platform.TextToolbar
 
-sealed class Destinations {
-    @Serializable
-    data object TasksListScreen : Destinations()
-
-    @Serializable
-    data object AddTaskScreen : Destinations()
-
-    @Serializable
-    data class TaskDetails(val taskId: Int) : Destinations()
+/**
+ * Indicated the type of [TextToolbar] that should be displayed.
+ */
+enum class TextToolbarType {
+    DEFAULT,
+    NONE,
 }

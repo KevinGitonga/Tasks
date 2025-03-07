@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.app.tasks.navigation
+package com.app.tasks.core.field
 
-import kotlinx.serialization.Serializable
-
-sealed class Destinations {
-    @Serializable
-    data object TasksListScreen : Destinations()
-
-    @Serializable
-    data object AddTaskScreen : Destinations()
-
-    @Serializable
-    data class TaskDetails(val taskId: Int) : Destinations()
-}
+/**
+ * Data class representing the data needed to create a tooltip icon in a composable.
+ *
+ * @property onClick A lambda function that defines the action to be performed when the tooltip icon
+ * is clicked.
+ * @property contentDescription A text description of the icon for accessibility purposes.
+ */
+data class TooltipData(
+    val onClick: () -> Unit,
+    val contentDescription: String,
+)

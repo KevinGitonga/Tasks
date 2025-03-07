@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.app.tasks"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
@@ -98,6 +98,7 @@ dependencies {
 
     // Kotlin serialization
     implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.collections.immutable)
 
     // Log
     implementation(libs.timber)

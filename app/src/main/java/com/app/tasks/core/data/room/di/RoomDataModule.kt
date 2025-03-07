@@ -17,6 +17,7 @@ package com.app.tasks.core.data.room.di
 
 import android.content.Context
 import androidx.room.Room
+import com.app.tasks.core.data.room.convertors.ZonedDateTimeTypeConverter
 import com.app.tasks.core.data.room.dao.TasksDao
 import com.app.tasks.core.data.room.database.TasksDatabase
 import com.app.tasks.core.data.room.localdatarepository.LocalDataRepository
@@ -46,6 +47,7 @@ class RoomDataModule {
                 name = "tasks_database",
             )
             .fallbackToDestructiveMigration()
+            .addTypeConverter(ZonedDateTimeTypeConverter())
             .build()
 
     @Provides
