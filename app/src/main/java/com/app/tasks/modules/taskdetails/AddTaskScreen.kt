@@ -15,7 +15,6 @@
  */
 package com.app.tasks.modules.taskdetails
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -51,6 +50,8 @@ import com.app.tasks.core.button.TasksAppTextButton
 import com.app.tasks.core.button.TasksAppTextSelectionButton
 import com.app.tasks.core.contentstate.TasksListLoadingContent
 import com.app.tasks.core.datepicker.TasksDatePicker
+import com.app.tasks.core.dialog.TasksAppBasicDialog
+import com.app.tasks.core.dialog.TasksAppLoadingDialog
 import com.app.tasks.core.dialog.TasksAppSelectionDialog
 import com.app.tasks.core.dialog.TasksAppSelectionRow
 import com.app.tasks.core.extensions.CardStyle
@@ -96,10 +97,8 @@ fun AddTaskScreen(
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            AddTaskEvent.ShowSuccessToast -> {
-                Toast
-                    .makeText(context, context.getString(R.string.task_saved_successfully), Toast.LENGTH_SHORT)
-                    .show()
+            AddTaskEvent.NavigateBackEvent -> {
+                navController.popBackStack()
             }
         }
     }
@@ -138,6 +137,22 @@ fun AddTaskScreen(
             },
             onDismiss = {},
             datePickerState = datePickerState,
+        )
+    }
+
+    if (state.showSuccessDialog) {
+        TasksAppBasicDialog(
+            title = stringResource(R.string.task_saved),
+            message = stringResource(R.string.task_saved_successfully),
+            onDismissRequest = {
+                viewModel.trySendAction(AddTaskAction.TaskSavedASuccessAction)
+            },
+        )
+    }
+
+    if (state.showLoadingDialog) {
+        TasksAppLoadingDialog(
+            text = stringResource(R.string.saving_task_please_wait),
         )
     }
 

@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
@@ -89,7 +90,7 @@ fun TaskListScreen(
                         onClick = {
                             viewModel.trySendAction(TaskListAction.TaskSortChangeAction(it))
                         },
-                        isSelected = it.name == state.sortBy.name,
+                        isSelected = it.sortName == state.sortBy.sortName,
                     )
                 }
             },
@@ -227,15 +228,13 @@ fun LazyListScope.section(
     }
 
     if (isExpanded) {
-        items(count = tasksData.tasks.count()) {
-            tasksData.tasks.forEach {
-                TaskListItem(
-                    taskEntity = it,
-                    onClick = {
-                        onTaskItemClick(it)
-                    },
-                )
-            }
+        items(tasksData.tasks, key = { task -> task.taskId }) { task ->
+            TaskListItem(
+                taskEntity = task,
+                onClick = {
+                    onTaskItemClick(it)
+                },
+            )
         }
     }
 

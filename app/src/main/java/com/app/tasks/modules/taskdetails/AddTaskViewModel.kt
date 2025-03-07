@@ -22,6 +22,7 @@ import com.app.tasks.core.constants.TaskStatuses
 import com.app.tasks.core.data.room.entities.TaskEntity
 import com.app.tasks.core.data.room.localdatarepository.LocalDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -93,16 +94,24 @@ class AddTaskViewModel
 
                 AddTaskAction.SaveTaskClick -> {
                     mutableStateFlow.update {
-                        it.copy(viewState = AddTaskState.ViewState.Loading)
+                        it.copy(showLoadingDialog = true)
                     }
 
                     saveTaskToDb()
+                }
+
+                AddTaskAction.TaskSavedASuccessAction -> {
+                    mutableStateFlow.update {
+                        it.copy(showSuccessDialog = false)
+                    }
+                    sendEvent(AddTaskEvent.NavigateBackEvent)
                 }
             }
         }
 
         private fun saveTaskToDb() {
             viewModelScope.launch {
+                delay(1000)
                 val saveResponse =
                     localDataRepository.saveTask(
                         TaskEntity(
@@ -116,10 +125,12 @@ class AddTaskViewModel
 
                 if (saveResponse.toString().isNotBlank()) {
                     mutableStateFlow.update {
-                        it.copy(viewState = AddTaskState.ViewState.Success)
+                        it.copy(
+                            viewState = AddTaskState.ViewState.Success,
+                            showLoadingDialog = false,
+                            showSuccessDialog = true,
+                        )
                     }
-
-                    sendEvent(AddTaskEvent.ShowSuccessToast)
                 }
             }
         }
@@ -136,6 +147,8 @@ data class AddTaskState(
     val taskDueDate: ZonedDateTime,
     val showPriorityDialog: Boolean = false,
     val showDatePickerDialog: Boolean = false,
+    val showSuccessDialog: Boolean = false,
+    val showLoadingDialog: Boolean = false,
 ) {
     /**
      * Represents the specific view states for the [AddTaskScreen].
@@ -172,7 +185,7 @@ sealed class AddTaskEvent {
     /**
      * Event to trigger Toast show.
      */
-    data object ShowSuccessToast : AddTaskEvent()
+    data object NavigateBackEvent : AddTaskEvent()
 }
 
 /**
@@ -222,6 +235,12 @@ sealed class AddTaskAction {
      *
      */
     data object SaveTaskClick : AddTaskAction()
+
+    /**
+     * Fired when user clicks to save Task.
+     *
+     */
+    data object TaskSavedASuccessAction : AddTaskAction()
 }
 
 enum class TaskPriorities(
