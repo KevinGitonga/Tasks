@@ -60,6 +60,7 @@ import com.app.tasks.modules.tasklist.components.TaskListItem
 import com.app.tasks.modules.tasklist.components.TasksFilterActionItem
 import com.app.tasks.modules.tasklist.models.TasksSectionData
 import com.app.tasks.navigation.Destinations
+import com.app.tasks.navigation.NavigationConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,8 +73,13 @@ fun TaskListScreen(
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            TaskListEvents.NavigateToTaskAddEditScreen -> {
-                navController.navigate(Destinations.AddTaskScreen)
+            TaskListEvents.NavigateToTaskAddScreen -> {
+                navController.navigate(
+                    "${Destinations.TaskDetails.route}/${NavigationConstants.Key.CREATE_TASK_DUMMY_ID}/${NavigationConstants.Key.CREATE_TASK_NAV}",
+                )
+            }
+            is TaskListEvents.NavigateToTaskEditScreen -> {
+                navController.navigate("${Destinations.TaskDetails.route}/${event.taskId}/${NavigationConstants.Key.EDIT_TASK_NAV}")
             }
         }
     }
@@ -174,7 +180,9 @@ fun TaskListScreen(
                                                     isExpandedMap[index] = true
                                                 }
                                             },
-                                            onTaskItemClick = {},
+                                            onTaskItemClick = {
+                                                viewModel.trySendAction(TaskListAction.TaskItemClickAction(it.taskId))
+                                            },
                                             currentPosition = index,
                                             dataSize = dataList.lastIndex,
                                         )

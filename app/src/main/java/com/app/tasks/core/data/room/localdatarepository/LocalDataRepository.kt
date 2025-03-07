@@ -41,5 +41,15 @@ interface LocalDataRepository {
     /**
      * Remove Task associated with Task id.
      */
-    suspend fun removeTask(taskId: String): Int
+    suspend fun removeTask(taskId: Int): Int
+
+    /**
+     * Get Task with Task id.
+     */
+    fun getSingleTask(taskId: Int): Flow<TaskEntity>
+
+    /**
+     * Get Task with Task id.
+     */
+    suspend fun updateTaskStatus(newStatus: String, taskId: Int): Int
 }

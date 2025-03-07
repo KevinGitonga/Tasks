@@ -20,10 +20,14 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.app.tasks.modules.taskdetails.AddTaskScreen
 import com.app.tasks.modules.tasklist.TaskListScreen
+import com.app.tasks.navigation.NavigationConstants.Key.NAV_TYPE
+import com.app.tasks.navigation.NavigationConstants.Key.TASK_ID
 
 @Composable
 fun MainNavGraph(
@@ -31,15 +35,27 @@ fun MainNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Destinations.TasksListScreen,
+        startDestination = Destinations.Task.route,
         enterTransition = { fadeIn(animationSpec = tween(300)) },
         exitTransition = { fadeOut(animationSpec = tween(300)) },
     ) {
-        composable<Destinations.TasksListScreen> {
+        composable(route = Destinations.Task.route) {
             TaskListScreen(navController = navController)
         }
 
-        composable<Destinations.AddTaskScreen> {
+        composable(
+            "${Destinations.TaskDetails.route}/{$TASK_ID}/{$NAV_TYPE}",
+            arguments =
+                listOf(
+                    navArgument(TASK_ID) {
+                        type = NavType.IntType
+                    },
+                    navArgument(NAV_TYPE) {
+                        type = NavType.StringType
+                        defaultValue = "create_task"
+                    },
+                ),
+        ) {
             AddTaskScreen(navController = navController)
         }
     }

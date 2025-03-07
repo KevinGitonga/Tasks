@@ -16,16 +16,20 @@
 package com.app.tasks.modules.taskdetails
 
 import android.os.Parcelable
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.app.tasks.core.base.BaseViewModel
 import com.app.tasks.core.constants.TaskStatuses
 import com.app.tasks.core.data.room.entities.TaskEntity
 import com.app.tasks.core.data.room.localdatarepository.LocalDataRepository
+import com.app.tasks.navigation.NavigationConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
@@ -34,6 +38,7 @@ class AddTaskViewModel
     @Inject
     constructor(
         private val localDataRepository: LocalDataRepository,
+        savedStateHandle: SavedStateHandle,
     ) : BaseViewModel<AddTaskState, AddTaskEvent, AddTaskAction>(
             initialState =
                 AddTaskState(
@@ -41,11 +46,34 @@ class AddTaskViewModel
                     taskTitle = "",
                     taskDescription = "",
                     taskDueDate = ZonedDateTime.now(),
+                    taskId = savedStateHandle.get<Int?>(NavigationConstants.Key.TASK_ID)?.toInt(),
+                    navType = savedStateHandle.get<String>(NavigationConstants.Key.NAV_TYPE).toString(),
                 ),
         ) {
         val taskPriorities = TaskPriorities.entries.toList()
 
         init {
+            Timber.e("EXTRA DATA" + state.taskId + state.navType)
+            if (state.navType == NavigationConstants.Key.EDIT_TASK_NAV) {
+                loadTaskDetails()
+            }
+        }
+
+        private fun loadTaskDetails() {
+            viewModelScope.launch {
+                state.taskId?.let { it1 ->
+                    localDataRepository.getSingleTask(it1).collectLatest { task ->
+                        mutableStateFlow.update {
+                            it.copy(
+                                taskTitle = task.title,
+                                taskDescription = task.description,
+                                taskDueDate = task.dueDate,
+                                taskPriority = taskPriorities.first { it.priorityValue == task.priority },
+                            )
+                        }
+                    }
+                }
+            }
         }
 
         override fun handleAction(action: AddTaskAction) {
@@ -106,6 +134,38 @@ class AddTaskViewModel
                     }
                     sendEvent(AddTaskEvent.NavigateBackEvent)
                 }
+
+                AddTaskAction.MarkTaskDoneAction -> {
+                    mutableStateFlow.update {
+                        it.copy(showLoadingDialog = true)
+                    }
+
+                    updateTaskStatus()
+                }
+            }
+        }
+
+        private fun updateTaskStatus() {
+            viewModelScope.launch {
+                delay(1000)
+
+                val saveResponse =
+                    state.taskId?.let {
+                        localDataRepository.updateTaskStatus(
+                            newStatus = TaskStatuses.Completed.statusName,
+                            taskId = it,
+                        )
+                    }
+
+                if (saveResponse.toString().isNotBlank()) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            viewState = AddTaskState.ViewState.Success,
+                            showLoadingDialog = false,
+                            showSuccessDialog = true,
+                        )
+                    }
+                }
             }
         }
 
@@ -149,6 +209,8 @@ data class AddTaskState(
     val showDatePickerDialog: Boolean = false,
     val showSuccessDialog: Boolean = false,
     val showLoadingDialog: Boolean = false,
+    val taskId: Int? = null,
+    val navType: String = "create_task",
 ) {
     /**
      * Represents the specific view states for the [AddTaskScreen].
@@ -241,6 +303,12 @@ sealed class AddTaskAction {
      *
      */
     data object TaskSavedASuccessAction : AddTaskAction()
+
+    /**
+     * Fired when user marks task as done.
+     *
+     */
+    data object MarkTaskDoneAction : AddTaskAction()
 }
 
 enum class TaskPriorities(

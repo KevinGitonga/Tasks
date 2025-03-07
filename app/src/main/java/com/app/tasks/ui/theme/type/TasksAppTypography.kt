@@ -42,4 +42,6 @@ data class TasksAppTypography(
     val sensitiveInfoMedium: TextStyle,
     val eyebrowMedium: TextStyle,
     val betslipTicketStyle: TextStyle,
+    val bodyLargeWithStrike: TextStyle,
+    val bodyMediumWithStrike: TextStyle,
 )

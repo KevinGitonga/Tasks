@@ -85,7 +85,7 @@ class TaskListViewModel
                                                         TaskHeaderItemModel(
                                                             sectionName = entry.key,
                                                             totalItemsCount = entry.value.count(),
-                                                            isExpanded = entry.key == state.filterBy.name,
+                                                            isExpanded = entry.key == state.filterBy.statusName,
                                                         ),
                                                     tasks = sortedTasks,
                                                     isExpanded = entry.key == state.filterBy.name,
@@ -103,7 +103,7 @@ class TaskListViewModel
         override fun handleAction(action: TaskListAction) {
             when (action) {
                 TaskListAction.AddTaskClick -> {
-                    sendEvent(TaskListEvents.NavigateToTaskAddEditScreen)
+                    sendEvent(TaskListEvents.NavigateToTaskAddScreen)
                 }
 
                 TaskListAction.ShowFilterDialogAction -> {
@@ -124,6 +124,10 @@ class TaskListViewModel
                     }
 
                     loadTasks()
+                }
+
+                is TaskListAction.TaskItemClickAction -> {
+                    sendEvent(TaskListEvents.NavigateToTaskEditScreen(action.taskId))
                 }
             }
         }
@@ -180,7 +184,12 @@ sealed class TaskListEvents {
     /**
      * Navigate to [TaskListScreen].
      */
-    data object NavigateToTaskAddEditScreen : TaskListEvents()
+    data object NavigateToTaskAddScreen : TaskListEvents()
+
+    /**
+     * Navigate to [TaskListScreen].
+     */
+    data class NavigateToTaskEditScreen(val taskId: Int) : TaskListEvents()
 }
 
 /**
@@ -201,6 +210,11 @@ sealed class TaskListAction {
      * Tasks filter param change.
      */
     data class TaskSortChangeAction(val newFilter: SortBy) : TaskListAction()
+
+    /**
+     * Tasks filter param change.
+     */
+    data class TaskItemClickAction(val taskId: Int) : TaskListAction()
 }
 
 enum class SortBy(

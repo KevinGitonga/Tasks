@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -306,6 +307,36 @@ val soccerScoresTypography: TasksAppTypography =
                         trim = LineHeightStyle.Trim.None,
                     ),
                 platformStyle = PlatformTextStyle(includeFontPadding = false),
+            ),
+        bodyLargeWithStrike =
+            TextStyle(
+                fontSize = 15.sp,
+                lineHeight = 20.sp,
+                fontFamily = FontFamily(Font(R.font.dm_sans_regular)),
+                fontWeight = FontWeight.W400,
+                letterSpacing = 0.sp,
+                lineHeightStyle =
+                    LineHeightStyle(
+                        alignment = LineHeightStyle.Alignment.Center,
+                        trim = LineHeightStyle.Trim.None,
+                    ),
+                platformStyle = PlatformTextStyle(includeFontPadding = false),
+                textDecoration = TextDecoration.LineThrough,
+            ),
+        bodyMediumWithStrike =
+            TextStyle(
+                fontSize = 13.sp,
+                lineHeight = 18.sp,
+                fontFamily = FontFamily(Font(R.font.dm_sans_regular)),
+                fontWeight = FontWeight.W400,
+                letterSpacing = 0.sp,
+                lineHeightStyle =
+                    LineHeightStyle(
+                        alignment = LineHeightStyle.Alignment.Center,
+                        trim = LineHeightStyle.Trim.None,
+                    ),
+                platformStyle = PlatformTextStyle(includeFontPadding = false),
+                textDecoration = TextDecoration.LineThrough,
             ),
     )
 

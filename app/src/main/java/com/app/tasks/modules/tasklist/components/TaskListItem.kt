@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.app.tasks.core.constants.TaskStatuses
 import com.app.tasks.core.data.room.entities.TaskEntity
 import com.app.tasks.core.utils.toFormattedPattern
 import com.app.tasks.modules.taskdetails.TaskPriorities
@@ -74,7 +75,12 @@ fun TaskListItem(
             ) {
                 Text(
                     text = taskEntity.title,
-                    style = TasksAppTheme.typography.bodyLarge,
+                    style =
+                        if (taskEntity.taskStatus == TaskStatuses.Completed.statusName) {
+                            TasksAppTheme.typography.bodyLargeWithStrike
+                        } else {
+                            TasksAppTheme.typography.bodyLarge
+                        },
                     color = TasksAppTheme.colorScheme.text.primary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -83,7 +89,12 @@ fun TaskListItem(
 
                 Text(
                     text = taskEntity.description,
-                    style = TasksAppTheme.typography.bodyMedium,
+                    style =
+                        if (taskEntity.taskStatus == TaskStatuses.Completed.statusName) {
+                            TasksAppTheme.typography.bodyMediumWithStrike
+                        } else {
+                            TasksAppTheme.typography.bodyMedium
+                        },
                     color = TasksAppTheme.colorScheme.text.secondary,
                     modifier = Modifier.padding(top = 2.dp),
                 )

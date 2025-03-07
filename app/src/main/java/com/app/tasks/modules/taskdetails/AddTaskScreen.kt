@@ -63,6 +63,7 @@ import com.app.tasks.core.scaffold.TasksAppScaffold
 import com.app.tasks.core.utils.asText
 import com.app.tasks.core.utils.rememberVectorPainter
 import com.app.tasks.core.utils.toFormattedPattern
+import com.app.tasks.navigation.NavigationConstants
 import timber.log.Timber
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -84,7 +85,7 @@ fun AddTaskScreen(
     var date: ZonedDateTime? by remember { mutableStateOf(state.taskDueDate) }
     // This tracks just the time component (hours and minutes) and ignores the higher level
     // components. 0 representing midnight and counting up from there.
-    var timeMillis: Long by remember {
+    val timeMillis: Long by remember {
         mutableLongStateOf(
             state.taskDueDate.let {
                 it.hour.hours.inWholeMilliseconds + it.minute.minutes.inWholeMilliseconds
@@ -142,8 +143,18 @@ fun AddTaskScreen(
 
     if (state.showSuccessDialog) {
         TasksAppBasicDialog(
-            title = stringResource(R.string.task_saved),
-            message = stringResource(R.string.task_saved_successfully),
+            title =
+                if (state.navType == NavigationConstants.Key.CREATE_TASK_NAV) {
+                    stringResource(R.string.task_saved)
+                } else {
+                    stringResource(R.string.task_updated)
+                },
+            message =
+                if (state.navType == NavigationConstants.Key.CREATE_TASK_NAV) {
+                    stringResource(R.string.task_saved_successfully)
+                } else {
+                    stringResource(R.string.task_updated_successfully)
+                },
             onDismissRequest = {
                 viewModel.trySendAction(AddTaskAction.TaskSavedASuccessAction)
             },
@@ -175,9 +186,18 @@ fun AddTaskScreen(
                     ),
                 actions = {
                     TasksAppTextButton(
-                        label = stringResource(id = R.string.save),
+                        label =
+                            if (state.navType == NavigationConstants.Key.CREATE_TASK_NAV) {
+                                stringResource(id = R.string.save)
+                            } else {
+                                stringResource(id = R.string.mark_done)
+                            },
                         onClick = {
-                            viewModel.trySendAction(AddTaskAction.SaveTaskClick)
+                            if (state.navType == NavigationConstants.Key.CREATE_TASK_NAV) {
+                                viewModel.trySendAction(AddTaskAction.SaveTaskClick)
+                            } else {
+                                viewModel.trySendAction(AddTaskAction.MarkTaskDoneAction)
+                            }
                         },
                         modifier = Modifier.testTag("SaveButton"),
                     )

@@ -52,5 +52,18 @@ interface TasksDao {
      * number of rows deleted by this query.
      */
     @Query("DELETE FROM tasks WHERE id = :taskId")
-    suspend fun removeTask(taskId: String): Int
+    suspend fun removeTask(taskId: Int): Int
+
+    /**
+     * Get Task associated with the given [taskId]. This will return the
+     */
+    @Query("SELECT * FROM tasks WHERE id = :taskId")
+    fun getSingleTask(taskId: Int): Flow<TaskEntity>
+
+    /**
+     * Update Task associated with the given [taskId]. This will return the
+     * number of rows affected by this query.
+     */
+    @Query("UPDATE tasks SET status=:newStatus WHERE id=:taskId")
+    suspend fun updateTaskStatus(taskId: Int, newStatus: String): Int
 }

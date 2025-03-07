@@ -41,7 +41,15 @@ class LocalDataRepositoryImpl(
         return tasksDao.deleteAllTasks()
     }
 
-    override suspend fun removeTask(taskId: String): Int {
+    override suspend fun removeTask(taskId: Int): Int {
         return tasksDao.removeTask(taskId = taskId)
+    }
+
+    override fun getSingleTask(taskId: Int): Flow<TaskEntity> {
+        return tasksDao.getSingleTask(taskId = taskId)
+    }
+
+    override suspend fun updateTaskStatus(newStatus: String, taskId: Int): Int {
+        return tasksDao.updateTaskStatus(taskId = taskId, newStatus = newStatus)
     }
 }

@@ -24,4 +24,7 @@
     <string name="expand">Expand</string>
     <string name="sort_tasks">Sort tasks</string>
     <string name="task_saved">Task saved</string>
+    <string name="mark_done">Mark done</string>
+    <string name="task_updated">Task updated</string>
+    <string name="task_updated_successfully">Task updated successfully.</string>
 </resources>

@@ -15,15 +15,28 @@
  */
 package com.app.tasks.navigation
 
-import kotlinx.serialization.Serializable
+import com.app.tasks.navigation.NavigationConstants.Screen.SUBTASK
+import com.app.tasks.navigation.NavigationConstants.Screen.TASK
 
-sealed class Destinations {
-    @Serializable
-    data object TasksListScreen : Destinations()
+sealed class Destinations(val route: String) {
+    object Task : Destinations(TASK)
 
-    @Serializable
-    data object AddTaskScreen : Destinations()
+    object TaskDetails : Destinations(SUBTASK)
+}
 
-    @Serializable
-    data class TaskDetails(val taskId: Int) : Destinations()
+object NavigationConstants {
+    object Screen {
+        const val TASK = "task"
+        const val SUBTASK = "task-details"
+    }
+
+    object Key {
+        const val TASK_ID = "task_id"
+        const val NAV_TYPE = "nav_type"
+
+        const val CREATE_TASK_NAV = "create_task"
+        const val EDIT_TASK_NAV = "edit_task"
+
+        const val CREATE_TASK_DUMMY_ID = -9
+    }
 }
