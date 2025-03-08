@@ -25,4 +25,6 @@ data class TasksSectionData(
     var tasks: List<TaskEntity>,
     val isExpanded: Boolean = false,
     val onHeaderClicked: () -> Unit,
+    val completedTasksCount: Int = 0,
+    val allTasksCount: Int = 0,
 ) : Parcelable

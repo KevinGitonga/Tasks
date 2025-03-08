@@ -58,6 +58,7 @@ import com.app.tasks.core.utils.rememberVectorPainter
 import com.app.tasks.modules.settings.components.SettingsActionItem
 import com.app.tasks.modules.tasklist.components.TaskListHeaderItem
 import com.app.tasks.modules.tasklist.components.TaskListItem
+import com.app.tasks.modules.tasklist.components.TaskListProgressItem
 import com.app.tasks.modules.tasklist.components.TasksFilterActionItem
 import com.app.tasks.modules.tasklist.models.TasksSectionData
 import com.app.tasks.navigation.Destinations
@@ -177,6 +178,22 @@ fun TaskListScreen(
                             modifier = Modifier.fillMaxSize(),
                             userScrollEnabled = true,
                             content = {
+                                if (dataList.isNotEmpty()) {
+                                    if (dataList.first().completedTasksCount > 0) {
+                                        val progressRate =
+                                            (
+                                                dataList.first().completedTasksCount.toDouble() /
+                                                    dataList.first().allTasksCount
+                                            ) * 100
+
+                                        item {
+                                            TaskListProgressItem(
+                                                progress = progressRate,
+                                            )
+                                        }
+                                    }
+                                }
+
                                 dataList
                                     .onEachIndexed { index, sectionData ->
                                         section(

@@ -62,6 +62,10 @@ class TaskListViewModel
                                     TaskListState.ViewState.NoItems
                                 } else {
                                     Timber.e("TASKS DATA" + it1.count())
+
+                                    val completedTasks = it1.filter { it.taskStatus == TaskStatuses.Completed.statusName }.count()
+                                    val allTasks = it1.count()
+
                                     val tasksData =
                                         it1.groupBy { it.taskStatus }
 
@@ -91,6 +95,8 @@ class TaskListViewModel
                                                     tasks = sortedTasks,
                                                     isExpanded = entry.key == state.filterBy.name,
                                                     onHeaderClicked = {},
+                                                    completedTasksCount = completedTasks,
+                                                    allTasksCount = allTasks,
                                                 )
                                             },
                                     )
