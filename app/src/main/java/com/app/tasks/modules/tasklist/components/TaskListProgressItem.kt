@@ -56,7 +56,6 @@ fun TaskListProgressItem(
                 Modifier
                     .fillMaxWidth()
                     .defaultMinSize(minHeight = 60.dp)
-                    .padding(10.dp)
                     .cardStyle(
                         cardStyle = CardStyle.Bottom,
                         onClick = {},
