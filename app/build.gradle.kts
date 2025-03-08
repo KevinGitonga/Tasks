@@ -25,16 +25,30 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
+    }
+
+    signingConfigs {
+        getByName("debug") {
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storeFile = file("../keystores/debug.keystore")
+            storePassword = "android"
+        }
     }
 
     buildTypes {
         debug {
             isDebuggable = true
+            signingConfig = signingConfigs.getByName("debug")
         }
         release {
             isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
+            signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -60,11 +74,19 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.8"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
             excludes += "/META-INF/LICENSE*"
         }
+    }
+
+    @Suppress("UnstableApiUsage")
+    testOptions {
+        // Required for Robolectric
+        unitTests.isIncludeAndroidResources = true
+        unitTests.isReturnDefaultValues = true
     }
 }
 
@@ -127,8 +149,10 @@ dependencies {
 
     // Unit Test
     testImplementation(libs.junit)
+    testImplementation(libs.junit.junit5)
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.robolectric.robolectric)
 
     // Android Test
     androidTestImplementation(libs.junit.ext)
@@ -142,3 +166,13 @@ dependencies {
 
 // Apply the git hooks setup script
 apply(from = "$rootDir/scripts/git-hook.gradle.kts")
+
+tasks {
+    withType<Test> {
+        useJUnitPlatform()
+        maxHeapSize = "2g"
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
+        android.sourceSets["main"].res.srcDirs("src/test/res")
+    }
+}
