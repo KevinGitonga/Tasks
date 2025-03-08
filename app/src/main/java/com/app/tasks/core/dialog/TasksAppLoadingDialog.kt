@@ -29,7 +29,7 @@ import androidx.compose.ui.window.PopupProperties
 import com.app.tasks.ui.theme.TasksAppTheme
 
 /**
- * Represents a SoccerScores-styled loading dialog that shows text and a circular progress indicator.
+ * Represents a TasksApp-styled loading dialog that shows text and a circular progress indicator.
  *
  * This implementation uses a `Popup` because the standard `Dialog` did not work with the intended
  * designs. When using a `Dialog`, the status bar was appearing dark and the content was going below

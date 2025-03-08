@@ -31,7 +31,7 @@ import com.app.tasks.core.button.TasksAppTextButton
 import com.app.tasks.ui.theme.TasksAppTheme
 
 /**
- * Represents a SoccerScores-styled dialog.
+ * Represents a TasksApp-styled dialog.
  *
  * @param title The optional title to be displayed by the dialog.
  * @param message The message to be displayed under the [title] by the dialog.

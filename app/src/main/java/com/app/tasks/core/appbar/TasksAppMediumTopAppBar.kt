@@ -41,7 +41,6 @@ import com.app.tasks.core.button.TasksAppStandardIconButton
 import com.app.tasks.core.extensions.bottomDivider
 import com.app.tasks.core.extensions.scrolledContainerBottomDivider
 import com.app.tasks.ui.theme.TasksAppTheme
-import com.soccerscores.app.core.components.appbar.TopAppBarDividerStyle
 
 /**
  * A custom TasksApp-themed medium top app bar with support for actions.

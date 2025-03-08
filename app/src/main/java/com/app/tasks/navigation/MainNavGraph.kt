@@ -15,9 +15,12 @@
  */
 package com.app.tasks.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -36,30 +39,6 @@ fun MainNavGraph(
     NavHost(
         navController = navController,
         startDestination = Destinations.Task.route,
-        enterTransition = {
-            slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Left,
-                tween(500),
-            )
-        },
-        exitTransition = {
-            slideOutOfContainer(
-                AnimatedContentTransitionScope.SlideDirection.Left,
-                tween(500),
-            )
-        },
-        popEnterTransition = {
-            slideIntoContainer(
-                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                animationSpec = tween(500),
-            )
-        },
-        popExitTransition = {
-            slideOutOfContainer(
-                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                animationSpec = tween(500),
-            )
-        },
     ) {
         composable(route = Destinations.Task.route) {
             TaskListScreen(navController = navController)
@@ -67,6 +46,18 @@ fun MainNavGraph(
 
         composable(
             "${Destinations.TaskDetails.route}/{$TASK_ID}/{$NAV_TYPE}",
+            enterTransition = {
+                scaleIn(
+                    spring(Spring.DampingRatioLowBouncy),
+                    transformOrigin = TransformOrigin(1F, 0F),
+                )
+            },
+            popExitTransition = {
+                scaleOut(
+                    spring(Spring.DampingRatioLowBouncy),
+                    transformOrigin = TransformOrigin(1F, 0F),
+                )
+            },
             arguments =
                 listOf(
                     navArgument(TASK_ID) {

@@ -50,10 +50,9 @@ import com.app.tasks.core.extensions.mirrorIfRtl
 import com.app.tasks.core.extensions.scrolledContainerBottomDivider
 import com.app.tasks.core.utils.rememberVectorPainter
 import com.app.tasks.ui.theme.TasksAppTheme
-import com.soccerscores.app.core.components.appbar.TopAppBarDividerStyle
 
 /**
- * Represents a SoccerScores styled [TopAppBar] that assumes the following components:
+ * Represents a TasksApp styled [TopAppBar] that assumes the following components:
  *
  * - a single navigation control in the upper-left defined by [navigationIcon],
  *   [navigationIconContentDescription], and [onNavigationIconClick].

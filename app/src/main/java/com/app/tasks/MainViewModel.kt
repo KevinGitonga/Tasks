@@ -30,7 +30,6 @@ import javax.inject.Inject
 /**
  * A view model that helps launch actions for the [MainActivity].
  */
-@Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 class MainViewModel
     @Inject

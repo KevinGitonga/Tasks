@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.app.tasks.ui.theme.TasksAppTheme
 
 /**
- * A SoccerScores-themed, re-usable loading state.
+ * A TasksApp-themed, re-usable loading state.
  */
 @Composable
 fun TasksAppLoadingContent(

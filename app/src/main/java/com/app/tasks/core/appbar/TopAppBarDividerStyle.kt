@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.soccerscores.app.core.components.appbar
+package com.app.tasks.core.appbar
 
 /**
- * Defines the possible display options for a bottom divider on a [SoccerScoresTopAppBar].
+ * Defines the possible display options for a bottom divider on a [TasksTopAppBar].
  */
 enum class TopAppBarDividerStyle {
     NONE,

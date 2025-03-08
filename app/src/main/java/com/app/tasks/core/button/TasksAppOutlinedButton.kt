@@ -38,7 +38,7 @@ import com.app.tasks.core.utils.rememberVectorPainter
 import com.app.tasks.ui.theme.TasksAppTheme
 
 /**
- * Represents a SoccerScores-styled filled [OutlinedButton].
+ * Represents a TasksApp-styled filled [OutlinedButton].
  *
  * @param label The label for the button.
  * @param onClick The callback when the button is clicked.

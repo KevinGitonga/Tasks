@@ -63,7 +63,6 @@ import com.app.tasks.modules.tasklist.components.TasksFilterActionItem
 import com.app.tasks.modules.tasklist.models.TasksSectionData
 import com.app.tasks.navigation.Destinations
 import com.app.tasks.navigation.NavigationConstants
-import kotlin.text.Typography.section
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
