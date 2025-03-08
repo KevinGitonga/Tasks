@@ -7,6 +7,7 @@ https://play.google.com/store/apps/details?id=com.google.android.apps.tasks&hl=e
 
 # App Screenshots
 https://github.com/KevinGitonga/Tasks/blob/main/screenshots/tasks_app_cover.png
+![Screenshot](screenshots/tasks_app_cover.png)
 
 ## Framework
 - MVVM
