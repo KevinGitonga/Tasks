@@ -24,7 +24,7 @@ https://github.com/KevinGitonga/Tasks/blob/main/screenshots/tasks_app_cover.png
 ## Highlights
 - Single Activity
 - Dark and light theme
-- SharedFlow for communication
+- Flows for communication
 - Reusable UI components
 - Local data persistence via room databases.
 - Unidirectional data flow.
