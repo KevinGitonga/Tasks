@@ -55,6 +55,7 @@ import com.app.tasks.core.fab.TasksAppFloatingActionButton
 import com.app.tasks.core.scaffold.TasksAppScaffold
 import com.app.tasks.core.utils.asText
 import com.app.tasks.core.utils.rememberVectorPainter
+import com.app.tasks.modules.settings.components.SettingsActionItem
 import com.app.tasks.modules.tasklist.components.TaskListHeaderItem
 import com.app.tasks.modules.tasklist.components.TaskListItem
 import com.app.tasks.modules.tasklist.components.TasksFilterActionItem
@@ -81,6 +82,14 @@ fun TaskListScreen(
             is TaskListEvents.NavigateToTaskEditScreen -> {
                 navController.navigate("${Destinations.TaskDetails.route}/${event.taskId}/${NavigationConstants.Key.EDIT_TASK_NAV}")
             }
+
+            TaskListEvents.NavigateToSettingsScreen -> {
+                navController.navigate(Destinations.Settings.route)
+            }
+
+            is TaskListEvents.NavigateToTaskDeleteScreen -> {
+                navController.navigate("${Destinations.TaskDetails.route}/${event.taskId}/${NavigationConstants.Key.DELETE_TASK_NAV}")
+            }
         }
     }
 
@@ -88,6 +97,7 @@ fun TaskListScreen(
         TasksAppSelectionDialog(
             title = stringResource(R.string.sort_tasks),
             onDismissRequest = {
+                viewModel.trySendAction(TaskListAction.DismissSortDialog)
             },
             selectionItems = {
                 viewModel.sortParams.forEach {
@@ -117,6 +127,13 @@ fun TaskListScreen(
                         contentDescription = stringResource(R.string.filter),
                         onClick = {
                             viewModel.trySendAction(TaskListAction.ShowFilterDialogAction)
+                        },
+                    )
+
+                    SettingsActionItem(
+                        contentDescription = stringResource(R.string.settings),
+                        onClick = {
+                            viewModel.trySendAction(TaskListAction.ShowSettingsScreenAction)
                         },
                     )
                 },
@@ -181,7 +198,7 @@ fun TaskListScreen(
                                                 }
                                             },
                                             onTaskItemClick = {
-                                                viewModel.trySendAction(TaskListAction.TaskItemClickAction(it.taskId))
+                                                viewModel.trySendAction(TaskListAction.TaskItemClickAction(it))
                                             },
                                             currentPosition = index,
                                             dataSize = dataList.lastIndex,

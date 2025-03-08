@@ -41,7 +41,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.app.tasks.R
 import com.app.tasks.core.button.TasksAppStandardIconButton
+import com.app.tasks.core.extensions.CardStyle
 import com.app.tasks.core.extensions.capitalize
+import com.app.tasks.core.extensions.cardStyle
 import com.app.tasks.core.utils.rememberVectorPainter
 import com.app.tasks.modules.tasklist.models.TaskHeaderItemModel
 import com.app.tasks.ui.theme.TasksAppTheme
@@ -71,7 +73,12 @@ fun TaskListHeaderItem(
                     .combinedClickable(
                         enabled = true,
                         onClick = { onClick?.invoke() },
-                    ).background(TasksAppTheme.colorScheme.background.primary),
+                    ).background(TasksAppTheme.colorScheme.background.primary)
+                    .cardStyle(
+                        cardStyle = CardStyle.Middle(hasDivider = true),
+                        onClick = onClick,
+                        paddingHorizontal = 10.dp,
+                    ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(

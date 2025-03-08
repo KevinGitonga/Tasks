@@ -36,6 +36,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.app.tasks.core.constants.TaskStatuses
 import com.app.tasks.core.data.room.entities.TaskEntity
+import com.app.tasks.core.divider.TasksAppHorizontalDivider
+import com.app.tasks.core.extensions.CardStyle
+import com.app.tasks.core.extensions.cardStyle
 import com.app.tasks.core.utils.toFormattedPattern
 import com.app.tasks.modules.taskdetails.TaskPriorities
 import com.app.tasks.ui.theme.TasksAppTheme
@@ -53,7 +56,6 @@ fun TaskListItem(
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 60.dp)
                 .padding(start = 10.dp, end = 10.dp),
-        colors = CardDefaults.cardColors(containerColor = TasksAppTheme.colorScheme.background.scrim),
         elevation = CardDefaults.cardElevation(2.dp),
         shape = RoundedCornerShape(bottomEnd = 0.dp, bottomStart = 0.dp),
     ) {
@@ -64,14 +66,21 @@ fun TaskListItem(
                     .combinedClickable(
                         enabled = true,
                         onClick = { onClick(taskEntity) },
-                    ).background(TasksAppTheme.colorScheme.background.primary),
+                    )
+                    .background(TasksAppTheme.colorScheme.background.primary)
+                    .cardStyle(
+                        cardStyle = CardStyle.Middle(hasDivider = true),
+                        onClick = { onClick(taskEntity) },
+                        paddingHorizontal = 10.dp,
+                    ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .wrapContentHeight().padding(5.dp),
+                        .wrapContentHeight()
+                        .padding(5.dp),
             ) {
                 Text(
                     text = taskEntity.title,
@@ -106,6 +115,12 @@ fun TaskListItem(
                     modifier = Modifier.padding(top = 2.dp),
                 )
             }
+            TasksAppHorizontalDivider(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 0.dp, top = 10.dp),
+            )
         }
     }
 }

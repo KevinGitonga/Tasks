@@ -13,17 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.app.tasks.core
+package com.app.tasks.core.data.preferences
 
-import androidx.appcompat.app.AppCompatDelegate
+import com.app.tasks.core.AppTheme
+import kotlinx.coroutines.flow.Flow
 
 /**
- * Represents the theme options the user can set.
- *
- * The [value] is used for consistent storage purposes.
+ * Primary access point for general settings-related disk information.
  */
-enum class AppTheme(val value: String?, val osValue: Int) {
-    DEFAULT(value = null, osValue = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM),
-    DARK(value = "dark", osValue = AppCompatDelegate.MODE_NIGHT_YES),
-    LIGHT(value = "light", osValue = AppCompatDelegate.MODE_NIGHT_NO),
+@Suppress("TooManyFunctions")
+interface SettingsDataStore {
+    /**
+     * The currently persisted app theme (or `null` if not set).
+     */
+    var appTheme: AppTheme
+
+    /**
+     * Emits updates that track [appTheme].
+     */
+    val appThemeFlow: Flow<AppTheme>
+
+    /**
+     * Clears all the settings data for the given user.
+     */
+    fun clearData(userId: String)
 }

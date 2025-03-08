@@ -27,4 +27,13 @@
     <string name="mark_done">Mark done</string>
     <string name="task_updated">Task updated</string>
     <string name="task_updated_successfully">Task updated successfully.</string>
+    <string name="settings">Settings</string>
+    <string name="theme">Theme</string>
+    <string name="default_system">Default (System)</string>
+    <string name="dark">Dark</string>
+    <string name="light">Light</string>
+    <string name="theme_description">Change the application\\\'s color theme</string>
+    <string name="delete_task">Delete task</string>
+    <string name="task_deleted_successfully">Task deleted successfully.</string>
+    <string name="task_deleted">Task deleted</string>
 </resources>

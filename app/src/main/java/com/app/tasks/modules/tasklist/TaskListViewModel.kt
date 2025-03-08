@@ -19,6 +19,7 @@ import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.app.tasks.core.base.BaseViewModel
 import com.app.tasks.core.constants.TaskStatuses
+import com.app.tasks.core.data.room.entities.TaskEntity
 import com.app.tasks.core.data.room.localdatarepository.LocalDataRepository
 import com.app.tasks.modules.tasklist.models.TaskHeaderItemModel
 import com.app.tasks.modules.tasklist.models.TasksSectionData
@@ -127,7 +128,23 @@ class TaskListViewModel
                 }
 
                 is TaskListAction.TaskItemClickAction -> {
-                    sendEvent(TaskListEvents.NavigateToTaskEditScreen(action.taskId))
+                    if (action.taskEntity.taskStatus == TaskStatuses.Pending.statusName) {
+                        sendEvent(TaskListEvents.NavigateToTaskEditScreen(action.taskEntity.taskId))
+                    } else {
+                        sendEvent(TaskListEvents.NavigateToTaskDeleteScreen(action.taskEntity.taskId))
+                    }
+                }
+
+                TaskListAction.ShowSettingsScreenAction -> {
+                    sendEvent(TaskListEvents.NavigateToSettingsScreen)
+                }
+
+                TaskListAction.DismissSortDialog -> {
+                    mutableStateFlow.update {
+                        it.copy(
+                            showSortDialog = false,
+                        )
+                    }
                 }
             }
         }
@@ -190,6 +207,16 @@ sealed class TaskListEvents {
      * Navigate to [TaskListScreen].
      */
     data class NavigateToTaskEditScreen(val taskId: Int) : TaskListEvents()
+
+    /**
+     * Navigate to [TaskListScreen].
+     */
+    data class NavigateToTaskDeleteScreen(val taskId: Int) : TaskListEvents()
+
+    /**
+     * Navigate to [SettingsScreen].
+     */
+    data object NavigateToSettingsScreen : TaskListEvents()
 }
 
 /**
@@ -202,19 +229,29 @@ sealed class TaskListAction {
     data object AddTaskClick : TaskListAction()
 
     /**
-     * Show filter Dialog.
+     * Show sort Dialog.
      */
     data object ShowFilterDialogAction : TaskListAction()
 
     /**
-     * Tasks filter param change.
+     * Tasks sort param change.
      */
     data class TaskSortChangeAction(val newFilter: SortBy) : TaskListAction()
 
     /**
+     * Dismiss sort Dialog.
+     */
+    data object DismissSortDialog : TaskListAction()
+
+    /**
      * Tasks filter param change.
      */
-    data class TaskItemClickAction(val taskId: Int) : TaskListAction()
+    data class TaskItemClickAction(val taskEntity: TaskEntity) : TaskListAction()
+
+    /**
+     * Show Settings Screen.
+     */
+    data object ShowSettingsScreenAction : TaskListAction()
 }
 
 enum class SortBy(

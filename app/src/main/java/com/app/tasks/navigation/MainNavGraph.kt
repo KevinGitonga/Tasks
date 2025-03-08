@@ -15,15 +15,15 @@
  */
 package com.app.tasks.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.app.tasks.modules.settings.SettingsScreen
 import com.app.tasks.modules.taskdetails.AddTaskScreen
 import com.app.tasks.modules.tasklist.TaskListScreen
 import com.app.tasks.navigation.NavigationConstants.Key.NAV_TYPE
@@ -36,8 +36,30 @@ fun MainNavGraph(
     NavHost(
         navController = navController,
         startDestination = Destinations.Task.route,
-        enterTransition = { fadeIn(animationSpec = tween(300)) },
-        exitTransition = { fadeOut(animationSpec = tween(300)) },
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                tween(500),
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                tween(500),
+            )
+        },
+        popEnterTransition = {
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
+                animationSpec = tween(500),
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
+                animationSpec = tween(500),
+            )
+        },
     ) {
         composable(route = Destinations.Task.route) {
             TaskListScreen(navController = navController)
@@ -57,6 +79,10 @@ fun MainNavGraph(
                 ),
         ) {
             AddTaskScreen(navController = navController)
+        }
+
+        composable(route = Destinations.Settings.route) {
+            SettingsScreen(navController = navController)
         }
     }
 }

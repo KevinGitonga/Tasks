@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.app.tasks.core
+package com.app.tasks.core.utils
 
-import androidx.appcompat.app.AppCompatDelegate
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 /**
- * Represents the theme options the user can set.
- *
- * The [value] is used for consistent storage purposes.
+ * Creates a [MutableSharedFlow] with a buffer of [Int.MAX_VALUE] and the given [replay] count.
  */
-enum class AppTheme(val value: String?, val osValue: Int) {
-    DEFAULT(value = null, osValue = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM),
-    DARK(value = "dark", osValue = AppCompatDelegate.MODE_NIGHT_YES),
-    LIGHT(value = "light", osValue = AppCompatDelegate.MODE_NIGHT_NO),
-}
+fun <T> bufferedMutableSharedFlow(replay: Int = 0): MutableSharedFlow<T> =
+    MutableSharedFlow(
+        replay = replay,
+        extraBufferCapacity = Int.MAX_VALUE,
+    )

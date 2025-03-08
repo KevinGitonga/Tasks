@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.app.tasks.core
+package com.app.tasks.core.utils
 
-import androidx.appcompat.app.AppCompatDelegate
+import com.app.tasks.R
+import com.app.tasks.core.AppTheme
 
 /**
- * Represents the theme options the user can set.
- *
- * The [value] is used for consistent storage purposes.
+ * Returns a human-readable display label for the given [AppTheme].
  */
-enum class AppTheme(val value: String?, val osValue: Int) {
-    DEFAULT(value = null, osValue = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM),
-    DARK(value = "dark", osValue = AppCompatDelegate.MODE_NIGHT_YES),
-    LIGHT(value = "light", osValue = AppCompatDelegate.MODE_NIGHT_NO),
-}
+val AppTheme.displayLabel: Text
+    get() =
+        when (this) {
+            AppTheme.DEFAULT -> R.string.default_system.asText()
+            AppTheme.DARK -> R.string.dark.asText()
+            AppTheme.LIGHT -> R.string.light.asText()
+        }

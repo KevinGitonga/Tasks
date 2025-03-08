@@ -108,6 +108,7 @@ dependencies {
 
     // Splash Screen
     implementation(libs.androidx.splashscreen)
+    implementation(libs.androidx.appcompat)
 
     // Database
     implementation(libs.room.runtime)

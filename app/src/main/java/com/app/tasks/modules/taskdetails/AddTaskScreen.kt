@@ -35,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -78,13 +77,9 @@ fun AddTaskScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
 
-    // This tracks the date component (year, month, and day) and ignores lower level
-    // components.
     var date: ZonedDateTime? by remember { mutableStateOf(state.taskDueDate) }
-    // This tracks just the time component (hours and minutes) and ignores the higher level
-    // components. 0 representing midnight and counting up from there.
+
     val timeMillis: Long by remember {
         mutableLongStateOf(
             state.taskDueDate.let {
@@ -108,6 +103,7 @@ fun AddTaskScreen(
         TasksAppSelectionDialog(
             title = stringResource(R.string.select_priority),
             onDismissRequest = {
+                viewModel.trySendAction(AddTaskAction.TaskPriorityDialogDismiss)
             },
             selectionItems = {
                 viewModel.taskPriorities.forEach {
@@ -136,7 +132,9 @@ fun AddTaskScreen(
                 date = it
                 viewModel.trySendAction(AddTaskAction.DueDateSelectionChange(requireNotNull(derivedDateTimeMillis)))
             },
-            onDismiss = {},
+            onDismiss = {
+                viewModel.trySendAction(AddTaskAction.DismissDatePickerAction)
+            },
             datePickerState = datePickerState,
         )
     }
@@ -144,16 +142,28 @@ fun AddTaskScreen(
     if (state.showSuccessDialog) {
         TasksAppBasicDialog(
             title =
-                if (state.navType == NavigationConstants.Key.CREATE_TASK_NAV) {
-                    stringResource(R.string.task_saved)
-                } else {
-                    stringResource(R.string.task_updated)
+                when (state.navType) {
+                    NavigationConstants.Key.CREATE_TASK_NAV -> {
+                        stringResource(R.string.task_saved)
+                    }
+                    NavigationConstants.Key.EDIT_TASK_NAV -> {
+                        stringResource(R.string.task_updated)
+                    }
+                    else -> {
+                        stringResource(R.string.task_deleted)
+                    }
                 },
             message =
-                if (state.navType == NavigationConstants.Key.CREATE_TASK_NAV) {
-                    stringResource(R.string.task_saved_successfully)
-                } else {
-                    stringResource(R.string.task_updated_successfully)
+                when (state.navType) {
+                    NavigationConstants.Key.CREATE_TASK_NAV -> {
+                        stringResource(R.string.task_saved_successfully)
+                    }
+                    NavigationConstants.Key.EDIT_TASK_NAV -> {
+                        stringResource(R.string.task_updated_successfully)
+                    }
+                    else -> {
+                        stringResource(R.string.task_deleted_successfully)
+                    }
                 },
             onDismissRequest = {
                 viewModel.trySendAction(AddTaskAction.TaskSavedASuccessAction)
@@ -187,19 +197,30 @@ fun AddTaskScreen(
                 actions = {
                     TasksAppTextButton(
                         label =
-                            if (state.navType == NavigationConstants.Key.CREATE_TASK_NAV) {
-                                stringResource(id = R.string.save)
-                            } else {
-                                stringResource(id = R.string.mark_done)
+                            when (state.navType) {
+                                NavigationConstants.Key.CREATE_TASK_NAV -> {
+                                    stringResource(id = R.string.save)
+                                }
+                                NavigationConstants.Key.EDIT_TASK_NAV -> {
+                                    stringResource(id = R.string.mark_done)
+                                }
+                                else -> {
+                                    stringResource(id = R.string.delete_task)
+                                }
                             },
                         onClick = {
-                            if (state.navType == NavigationConstants.Key.CREATE_TASK_NAV) {
-                                viewModel.trySendAction(AddTaskAction.SaveTaskClick)
-                            } else {
-                                viewModel.trySendAction(AddTaskAction.MarkTaskDoneAction)
+                            when (state.navType) {
+                                NavigationConstants.Key.CREATE_TASK_NAV -> {
+                                    viewModel.trySendAction(AddTaskAction.SaveTaskClick)
+                                }
+                                NavigationConstants.Key.EDIT_TASK_NAV -> {
+                                    viewModel.trySendAction(AddTaskAction.MarkTaskDoneAction)
+                                }
+                                else -> {
+                                    viewModel.trySendAction(AddTaskAction.DeleteTaskAction)
+                                }
                             }
                         },
-                        modifier = Modifier.testTag("SaveButton"),
                     )
                 },
             )

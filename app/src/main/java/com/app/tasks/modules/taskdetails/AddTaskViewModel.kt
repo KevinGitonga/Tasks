@@ -22,6 +22,8 @@ import com.app.tasks.core.base.BaseViewModel
 import com.app.tasks.core.constants.TaskStatuses
 import com.app.tasks.core.data.room.entities.TaskEntity
 import com.app.tasks.core.data.room.localdatarepository.LocalDataRepository
+import com.app.tasks.core.extensions.orNow
+import com.app.tasks.core.extensions.orNullIfBlank
 import com.app.tasks.navigation.NavigationConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -29,7 +31,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import timber.log.Timber
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
@@ -53,8 +54,7 @@ class AddTaskViewModel
         val taskPriorities = TaskPriorities.entries.toList()
 
         init {
-            Timber.e("EXTRA DATA" + state.taskId + state.navType)
-            if (state.navType == NavigationConstants.Key.EDIT_TASK_NAV) {
+            if (state.navType != NavigationConstants.Key.CREATE_TASK_NAV) {
                 loadTaskDetails()
             }
         }
@@ -63,13 +63,18 @@ class AddTaskViewModel
             viewModelScope.launch {
                 state.taskId?.let { it1 ->
                     localDataRepository.getSingleTask(it1).collectLatest { task ->
-                        mutableStateFlow.update {
-                            it.copy(
-                                taskTitle = task.title,
-                                taskDescription = task.description,
-                                taskDueDate = task.dueDate,
-                                taskPriority = taskPriorities.first { it.priorityValue == task.priority },
-                            )
+                        if (task != null && task.title.isNotBlank()) {
+                            mutableStateFlow.update {
+                                it.copy(
+                                    taskTitle = task.title.orNullIfBlank() ?: state.taskTitle,
+                                    taskDescription = task.description.orNullIfBlank() ?: state.taskDescription,
+                                    taskDueDate = task.dueDate.orNow(),
+                                    taskPriority =
+                                        taskPriorities.first {
+                                            it.priorityValue == (task.priority ?: state.taskPriority)
+                                        },
+                                )
+                            }
                         }
                     }
                 }
@@ -141,6 +146,48 @@ class AddTaskViewModel
                     }
 
                     updateTaskStatus()
+                }
+
+                AddTaskAction.DismissDatePickerAction -> {
+                    mutableStateFlow.update {
+                        it.copy(showDatePickerDialog = false)
+                    }
+                }
+
+                AddTaskAction.TaskPriorityDialogDismiss -> {
+                    mutableStateFlow.update {
+                        it.copy(showPriorityDialog = false)
+                    }
+                }
+
+                AddTaskAction.DeleteTaskAction -> {
+                    mutableStateFlow.update {
+                        it.copy(showLoadingDialog = true)
+                    }
+
+                    deleteCompletedTask()
+                }
+            }
+        }
+
+        private fun deleteCompletedTask() {
+            viewModelScope.launch {
+                delay(1000)
+                val deleteResponse =
+                    state.taskId?.let {
+                        localDataRepository.removeTask(
+                            taskId = it,
+                        )
+                    }
+
+                if (deleteResponse.toString().isNotBlank()) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            viewState = AddTaskState.ViewState.Success,
+                            showLoadingDialog = false,
+                            showSuccessDialog = true,
+                        )
+                    }
                 }
             }
         }
@@ -281,10 +328,22 @@ sealed class AddTaskAction {
     data object DatePickerDialogAction : AddTaskAction()
 
     /**
+     * Fired when the user dismisses date picker dialog.
+     *
+     */
+    data object DismissDatePickerAction : AddTaskAction()
+
+    /**
      * Fired when the task priority selection is changed.
      *
      */
     data class TaskPrioritySelectionChange(val taskPriority: TaskPriorities) : AddTaskAction()
+
+    /**
+     * Fired when the user dismisses priority picker dialog.
+     *
+     */
+    data object TaskPriorityDialogDismiss : AddTaskAction()
 
     /**
      * Fired when a due date for the task is selected.
@@ -309,6 +368,12 @@ sealed class AddTaskAction {
      *
      */
     data object MarkTaskDoneAction : AddTaskAction()
+
+    /**
+     * Fired when user clicks on delete task button.
+     *
+     */
+    data object DeleteTaskAction : AddTaskAction()
 }
 
 enum class TaskPriorities(

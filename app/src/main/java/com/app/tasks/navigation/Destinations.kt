@@ -15,19 +15,23 @@
  */
 package com.app.tasks.navigation
 
+import com.app.tasks.navigation.NavigationConstants.Screen.SETTINGS
 import com.app.tasks.navigation.NavigationConstants.Screen.SUBTASK
 import com.app.tasks.navigation.NavigationConstants.Screen.TASK
 
 sealed class Destinations(val route: String) {
-    object Task : Destinations(TASK)
+    data object Task : Destinations(TASK)
 
-    object TaskDetails : Destinations(SUBTASK)
+    data object TaskDetails : Destinations(SUBTASK)
+
+    data object Settings : Destinations(SETTINGS)
 }
 
 object NavigationConstants {
     object Screen {
         const val TASK = "task"
         const val SUBTASK = "task-details"
+        const val SETTINGS = "settings"
     }
 
     object Key {
@@ -36,6 +40,7 @@ object NavigationConstants {
 
         const val CREATE_TASK_NAV = "create_task"
         const val EDIT_TASK_NAV = "edit_task"
+        const val DELETE_TASK_NAV = "delete_task"
 
         const val CREATE_TASK_DUMMY_ID = -9
     }

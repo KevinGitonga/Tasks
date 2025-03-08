@@ -19,22 +19,47 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import com.app.tasks.core.base.EventsEffect
+import com.app.tasks.core.data.preferences.SettingsDataStore
 import com.app.tasks.navigation.MainNavGraph
 import com.app.tasks.ui.theme.TasksAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+/**
+ * Entry point for the application.
+ */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val mainViewModel: MainViewModel by viewModels()
+
+    @Inject
+    lateinit var settingsDataStore: SettingsDataStore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        AppCompatDelegate.setDefaultNightMode(settingsDataStore.appTheme.osValue)
         setContent {
+            val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             val navController = rememberNavController()
 
-            TasksAppTheme {
+            EventsEffect(viewModel = mainViewModel) { event ->
+                when (event) {
+                    is MainEvent.UpdateAppTheme -> {
+                        AppCompatDelegate.setDefaultNightMode(event.osTheme)
+                    }
+                }
+            }
+
+            TasksAppTheme(theme = state.theme) {
                 MainNavGraph(
                     navController = navController,
                 )
