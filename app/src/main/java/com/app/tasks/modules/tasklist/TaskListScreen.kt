@@ -45,9 +45,9 @@ import androidx.navigation.NavController
 import com.app.tasks.R
 import com.app.tasks.core.appbar.TasksAppMediumTopAppBar
 import com.app.tasks.core.base.EventsEffect
+import com.app.tasks.core.contentstate.ShimmeringLoadingContent
 import com.app.tasks.core.contentstate.TaskListNoItems
 import com.app.tasks.core.contentstate.TasksListErrorContent
-import com.app.tasks.core.contentstate.TasksListLoadingContent
 import com.app.tasks.core.data.room.entities.TaskEntity
 import com.app.tasks.core.dialog.TasksAppSelectionDialog
 import com.app.tasks.core.dialog.TasksAppSelectionRow
@@ -63,6 +63,7 @@ import com.app.tasks.modules.tasklist.components.TasksFilterActionItem
 import com.app.tasks.modules.tasklist.models.TasksSectionData
 import com.app.tasks.navigation.Destinations
 import com.app.tasks.navigation.NavigationConstants
+import kotlin.text.Typography.section
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -235,9 +236,16 @@ fun TaskListScreen(
                     }
 
                     TaskListState.ViewState.Loading -> {
-                        TasksListLoadingContent(
-                            modifier = Modifier.fillMaxSize(),
-                        )
+                        val dummyDataList = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
+                            dummyDataList.forEach {
+                                item {
+                                    ShimmeringLoadingContent()
+                                    Spacer(modifier = Modifier.height(height = 8.dp))
+                                }
+                            }
+                        }
                     }
 
                     TaskListState.ViewState.NoItems -> {

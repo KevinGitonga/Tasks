@@ -115,6 +115,9 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.room)
 
+    // Shimmer Loading
+    implementation(libs.shimmer.loading)
+
     // Dependency Management
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

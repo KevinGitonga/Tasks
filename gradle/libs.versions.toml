@@ -18,6 +18,7 @@ androidXAppCompat = "1.7.0"
 coroutines = "1.10.1"
 timber = "5.0.1"
 hiltKtx = "1.2.0"
+shimmerLoading = "1.3.2"
 jvmTarget = "17"
 spotless = "6.25.0"
 
@@ -77,6 +78,9 @@ work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work"
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room"}
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room"}
 room = { module = "androidx.room:room-ktx", version.ref = "room"}
+
+# Shimmer loading
+shimmer-loading = {module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "shimmerLoading"}
 
 # Dependency Management
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"}
